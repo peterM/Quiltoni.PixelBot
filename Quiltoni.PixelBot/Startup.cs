@@ -36,28 +36,45 @@ namespace Quiltoni.PixelBot
 
 			//services.Configure<PixelBotConfig>(Configuration.GetSection("PixelBot"));
 
-			services.AddTransient<PixelBotConfig>();
+			SetupConfigurationProvider(services);
 
-			var configSection = Configuration.GetSection("PixelBot");
+			// Register bot commands
+			GetType().Assembly.GetTypes()
+				.Where(t => t != typeof(IBotCommand) && typeof(IBotCommand).IsAssignableFrom(t))
+				.ToList().ForEach(t => services.AddTransient(typeof(IBotCommand), t));
+
+			_ = services.AddHttpClient("giveaway");
+
+			_ = services.AddSingleton<IHostedService, PixelBot>()
+				.AddSingleton<GuessGame>()
+				.AddSingleton<GiveawayGame.GiveawayGame>();
+
+
+			_ = services.AddMvc();
+
+		}
+
+		private void SetupConfigurationProvider(IServiceCollection services) {
+			IConfigurationSection configSection = Configuration.GetSection("PixelBot");
 
 			services.AddSingleton<ITwitchConfig>(
-				d => SectionProcessor.GetService<ITwitchConfig>(
+				_ => SectionProcessor.GetService<ITwitchConfig>(
 					configSection.GetSection("Twitch")));
 
 			services.AddSingleton<ICurrencyConfig>(
-				d => SectionProcessor.GetService<ICurrencyConfig>(
+				_ => SectionProcessor.GetService<ICurrencyConfig>(
 					configSection.GetSection("Currency")));
 
 			services.AddSingleton<IGoogleConfig>(
-				d => SectionProcessor.GetService<IGoogleConfig>(
+				_ => SectionProcessor.GetService<IGoogleConfig>(
 					configSection.GetSection("Google")));
 
 			services.AddSingleton<IGiveawayGameConfiguration>(
-				d => SectionProcessor.GetService<IGiveawayGameConfiguration>(
+				_ => SectionProcessor.GetService<IGiveawayGameConfiguration>(
 					configSection.GetSection("GiveawayGame")));
 
 			services.AddSingleton<ICommandsConfig>(
-				d => SectionProcessor.GetService<ICommandsConfig>(
+				_ => SectionProcessor.GetService<ICommandsConfig>(
 					configSection.GetSection("Commands")));
 
 			services.AddTransient<IServiceConfig>(d => d.GetService<ITwitchConfig>());
@@ -66,6 +83,7 @@ namespace Quiltoni.PixelBot
 			services.AddTransient<IServiceConfig>(d => d.GetService<IGiveawayGameConfiguration>());
 			services.AddTransient<IServiceConfig>(d => d.GetService<ICommandsConfig>());
 
+			services.AddTransient<IPixelBotConfigProvider, PixelBotConfig>();
 			// Register bot commands
 			GetType().Assembly.GetTypes()
 				.Where(t => t != typeof(IBotCommand) && typeof(IBotCommand).IsAssignableFrom(t))

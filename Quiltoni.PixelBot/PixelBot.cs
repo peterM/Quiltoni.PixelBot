@@ -30,8 +30,7 @@ namespace Quiltoni.PixelBot
 		private readonly ISheetProxy _GoogleSheet;
 		private readonly bool _EnableSubPixels = false;
 
-		public PixelBot(IEnumerable<IBotCommand> commands, PixelBotConfig configuration, ILoggerFactory loggerFactory)
-		{
+		public PixelBot(IEnumerable<IBotCommand> commands, IPixelBotConfigProvider configuration, ILoggerFactory loggerFactory) {
 
 			Config = configuration;
 			Commands = commands.Where(c => c.Enabled);
@@ -42,7 +41,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		public static PixelBotConfig Config { get; set; }
+		public static IPixelBotConfigProvider Config { get; set; }
 		public IEnumerable<IBotCommand> Commands { get; }
 		public ILogger Logger { get; }
 
@@ -51,8 +50,7 @@ namespace Quiltoni.PixelBot
 
 		public string Spreadsheet { get { return Config.Google.SheetId; } }
 
-		public Task StartAsync(CancellationToken cancellationToken)
-		{
+		public Task StartAsync(CancellationToken cancellationToken) {
 
 			var creds = new ConnectionCredentials(Config.Twitch.UserName, Config.Twitch.AccessToken);
 			_Client = new TwitchClient();
@@ -81,8 +79,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		private void _Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e) 
-		{
+		private void _Client_OnChatCommandReceived(object sender, OnChatCommandReceivedArgs e) {
 
 			var cmd = Commands.FirstOrDefault(c => c.CommandText == e.Command.CommandText);
 
@@ -95,8 +92,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		private void _Client_OnRaidNotification(object sender, OnRaidNotificationArgs e)
-		{
+		private void _Client_OnRaidNotification(object sender, OnRaidNotificationArgs e) {
 
 			if (!_EnableSubPixels) return;
 
@@ -117,8 +113,7 @@ namespace Quiltoni.PixelBot
 			{ SubscriptionPlan.Tier3, 60 },
 		};
 
-		private void _Client_OnReSubscriber(object sender, OnReSubscriberArgs e)
-		{
+		private void _Client_OnReSubscriber(object sender, OnReSubscriberArgs e) {
 
 			if (!_EnableSubPixels) return;
 
@@ -126,8 +121,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		private void _Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e)
-		{
+		private void _Client_OnNewSubscriber(object sender, OnNewSubscriberArgs e) {
 
 			if (!_EnableSubPixels) return;
 
@@ -135,8 +129,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		private void _Client_OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e)
-		{
+		private void _Client_OnGiftedSubscription(object sender, OnGiftedSubscriptionArgs e) {
 
 			if (!_EnableSubPixels) return;
 
@@ -145,8 +138,7 @@ namespace Quiltoni.PixelBot
 
 		}
 
-		public Task StopAsync(CancellationToken cancellationToken)
-		{
+		public Task StopAsync(CancellationToken cancellationToken) {
 			if (_Client != null) _Client.Disconnect();
 			return Task.CompletedTask;
 		}

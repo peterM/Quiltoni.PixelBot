@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Quiltoni.PixelBot.Configuration
 {
 	public class CommandsConfig : AbstractServiceConfig, ICommandsConfig
 	{
-		public CommandsConfig(Dictionary<string, bool> botCommands) {
+		public CommandsConfig(IEnumerable<IBotCommandConfig> botCommands) {
 			SetConfig(nameof(Commands), botCommands);
 		}
 
-		public Dictionary<string, bool> Commands => GetConfigValue<Dictionary<string, bool>>();
+		private IEnumerable<IBotCommandConfig> Commands => GetConfigValue<IEnumerable<IBotCommandConfig>>();
+
+		public IBotCommandConfig GetCommand(string name) {
+			return Commands.SingleOrDefault(d => d.Name == name);
+		}
 	}
 }

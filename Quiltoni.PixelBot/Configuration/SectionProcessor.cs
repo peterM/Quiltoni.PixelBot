@@ -63,7 +63,7 @@ namespace Quiltoni.PixelBot.Configuration
 
 		private static ICommandsConfig GetCommandsServiceConfiguration(Dictionary<string, string> dictionary) {
 			var newDictionary = dictionary.ToDictionary(pair => pair.Key, pair => Convert.ToBoolean(pair.Value));
-			return new CommandsConfig(newDictionary);
+			return new CommandsConfig(newDictionary.Select(d => new BotCommandConfig(d.Key, d.Value)));
 		}
 
 		private static string GetValue(Dictionary<string, string> dictionary, string key) {

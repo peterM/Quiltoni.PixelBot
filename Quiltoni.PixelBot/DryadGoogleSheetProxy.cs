@@ -22,7 +22,7 @@ namespace Quiltoni.PixelBot
 		static string[] Scopes = { SheetsService.Scope.Spreadsheets };
 		private bool _First = true;
 
-		public DryadGoogleSheetProxy(PixelBotConfig configuration, ILoggerFactory loggerFactory) {
+		public DryadGoogleSheetProxy(IPixelBotConfigProvider configuration, ILoggerFactory loggerFactory) {
 
 			Config = configuration;
 			this.Logger = loggerFactory.CreateLogger("GoogleSheetProxy");
@@ -36,7 +36,7 @@ namespace Quiltoni.PixelBot
 		/// </summary>
 		protected DryadGoogleSheetProxy() { }
 
-		public static PixelBotConfig Config { get; set; }
+		public static IPixelBotConfigProvider Config { get; set; }
 
 		private ILogger Logger { get; }
 

@@ -5,8 +5,7 @@ using Quiltoni.PixelBot.GiveawayGame;
 
 namespace Quiltoni.PixelBot
 {
-
-	public class PixelBotConfig
+	public class PixelBotConfig : IPixelBotConfigProvider
 	{
 		private readonly IReadOnlyCollection<IServiceConfig> _configs;
 

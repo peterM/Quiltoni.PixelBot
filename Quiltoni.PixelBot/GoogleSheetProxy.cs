@@ -22,7 +22,7 @@ namespace Quiltoni.PixelBot
 		private UserCredential _GoogleCredential;
 		static string[] Scopes = { SheetsService.Scope.Spreadsheets };
 		private bool _First = true;
-		public GoogleSheetProxy(PixelBotConfig configuration, ILoggerFactory loggerFactory) {
+		public GoogleSheetProxy(IPixelBotConfigProvider configuration, ILoggerFactory loggerFactory) {
 
 			Config = configuration;
 			this.Logger = loggerFactory.CreateLogger("GoogleSheetProxy");
@@ -39,7 +39,7 @@ namespace Quiltoni.PixelBot
 		/// </summary>
 		protected GoogleSheetProxy() { }
 
-		public static PixelBotConfig Config { get; set; }
+		public static IPixelBotConfigProvider Config { get; set; }
 
 		public ILogger Logger { get; }
 
@@ -64,7 +64,7 @@ namespace Quiltoni.PixelBot
 			GetSheetService(out service, out values);
 			var appends = new ValueRange() { Values = new List<IList<object>>() };
 			var updates = new List<ValueRange>();
-			var logrows =  new List<IList<object>>();
+			var logrows = new List<IList<object>>();
 
 			Twitch.BroadcastMessageOnChannel($"I've begun adding {numPixelsToAdd} {Models.Currency.Name} to all people in chat");
 
@@ -81,8 +81,9 @@ namespace Quiltoni.PixelBot
 				var thisRow = values.FirstOrDefault(r => r[0].ToString().Trim().ToLowerInvariant() == userName);
 				if (thisRow == null) {
 					Logger.LogDebug($"Adding row for {userName}");
-					appends.Values.Add(new List<object>() {userName, numPixelsToAdd });
-				} else {
+					appends.Values.Add(new List<object>() { userName, numPixelsToAdd });
+				}
+				else {
 					Logger.LogDebug($"Updating row for {userName}");
 
 					var pos = values.IndexOf(thisRow);
@@ -327,10 +328,9 @@ namespace Quiltoni.PixelBot
 			userName = userName.ToLowerInvariant().Trim();
 
 			var thisRow = values.FirstOrDefault(r => r[0].ToString().Trim().ToLowerInvariant() == userName);
-			if (thisRow == null || thisRow.Count < 2) 
-			{
+			if (thisRow == null || thisRow.Count < 2) {
 				return 0;
-			} 
+			}
 
 			return int.Parse(thisRow[1].ToString());
 

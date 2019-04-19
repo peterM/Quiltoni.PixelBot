@@ -17,21 +17,21 @@ namespace Quiltoni.PixelBot.Pages
 	public class IndexModel : PageModel
 	{
 
-		public IndexModel(PixelBotConfig config)
-		{
+		public IndexModel(IPixelBotConfigProvider config) {
 			this.Config = config;
 			PixelBot.Config = config;
 
 			CurrencyName = config.Currency.Name;
 			SheetProxyType = config.Currency.SheetType;
-			EnableDrinkMeCommand = config.Commands.Commands["DrinkMeCommand"];
-			EnableGuessCommand = config.Commands.Commands["GuessTimeCommand"];
+			EnableDrinkMeCommand = config.Commands.GetCommand("DrinkMeCommand").IsEnabled;
+			EnableGuessCommand = config.Commands.GetCommand("GuessTimeCommand").IsEnabled;
 
 		}
 
-		public PixelBotConfig Config { get; }
+		public IPixelBotConfigProvider Config { get; }
 
-		public IEnumerable<SelectListItem> AvailableGoogleProxy { get {
+		public IEnumerable<SelectListItem> AvailableGoogleProxy {
+			get {
 
 				var iProxyType = typeof(ISheetProxy);
 				return GetType().Assembly.GetTypes()
@@ -39,7 +39,8 @@ namespace Quiltoni.PixelBot.Pages
 					.OrderBy(t => t.Name)
 					.Select(t => new SelectListItem(t.Name, t.Name));
 
-			} }
+			}
+		}
 
 		[BindProperty]
 		[Required]
