@@ -22,9 +22,9 @@ namespace Quiltoni.PixelBot
 		private UserCredential _GoogleCredential;
 		static string[] Scopes = { SheetsService.Scope.Spreadsheets };
 		private bool _First = true;
-		public GoogleSheetProxy(IOptions<PixelBotConfig> configuration, ILoggerFactory loggerFactory) {
+		public GoogleSheetProxy(PixelBotConfig configuration, ILoggerFactory loggerFactory) {
 
-			Config = configuration.Value;
+			Config = configuration;
 			this.Logger = loggerFactory.CreateLogger("GoogleSheetProxy");
 
 			ConfigureGoogleSheetsAccess();

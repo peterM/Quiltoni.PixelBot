@@ -17,15 +17,15 @@ namespace Quiltoni.PixelBot.Pages
 	public class IndexModel : PageModel
 	{
 
-		public IndexModel(IOptionsSnapshot<PixelBotConfig> config)
+		public IndexModel(PixelBotConfig config)
 		{
-			this.Config = config.Value;
-			PixelBot.Config = config.Value;
+			this.Config = config;
+			PixelBot.Config = config;
 
-			CurrencyName = config.Value.Currency.Name;
-			SheetProxyType = config.Value.Currency.SheetType;
-			EnableDrinkMeCommand = config.Value.Commands["DrinkMeCommand"];
-			EnableGuessCommand = config.Value.Commands["GuessTimeCommand"];
+			CurrencyName = config.Currency.Name;
+			SheetProxyType = config.Currency.SheetType;
+			EnableDrinkMeCommand = config.Commands["DrinkMeCommand"];
+			EnableGuessCommand = config.Commands["GuessTimeCommand"];
 
 		}
 

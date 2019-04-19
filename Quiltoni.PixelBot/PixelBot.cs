@@ -30,10 +30,10 @@ namespace Quiltoni.PixelBot
 		private readonly ISheetProxy _GoogleSheet;
 		private readonly bool _EnableSubPixels = false;
 
-		public PixelBot(IEnumerable<IBotCommand> commands, IOptions<PixelBotConfig> configuration, ILoggerFactory loggerFactory)
+		public PixelBot(IEnumerable<IBotCommand> commands, PixelBotConfig configuration, ILoggerFactory loggerFactory)
 		{
 
-			Config = configuration.Value;
+			Config = configuration;
 			Commands = commands.Where(c => c.Enabled);
 			this.Logger = loggerFactory.CreateLogger("PixelBot");
 			var sheetType = GetType().Assembly.DefinedTypes.First(t => t.Name == Models.Currency.SheetType);

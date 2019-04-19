@@ -1,49 +1,31 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Quiltoni.PixelBot.Configuration;
 
 namespace Quiltoni.PixelBot
 {
 
 	public class PixelBotConfig
 	{
-		public TwitchConfig Twitch { get; set; }
+		private readonly IReadOnlyCollection<IServiceConfig> _configs;
 
-		public GoogleConfig Google { get; set; }
+		public PixelBotConfig(IEnumerable<IServiceConfig> configs) {
+			_configs = configs.ToList();
+		}
+
+		public ITwitchConfig Twitch => GetConfig<ITwitchConfig>();
+
+		public IGoogleConfig Google => GetConfig<IGoogleConfig>();
 
 		public GiveawayGame.GiveawayGameConfiguration GiveawayGame { get; set; }
 
-		public CurrencyConfig Currency { get; set; }
+		public ICurrencyConfig Currency => GetConfig<ICurrencyConfig>();
 
 		public Dictionary<string, bool> Commands { get; set; }
 
-		public class TwitchConfig
-		{
-			public string UserName { get; set; }
-			public string Channel { get; set; }
-			public string AccessToken { get; set; }
+		public T GetConfig<T>()
+			where T : IServiceConfig {
+			return _configs.OfType<T>().FirstOrDefault();
 		}
-
-		public class GoogleConfig
-		{
-
-			public string ClientId { get; set; }
-
-			public string ClientSecret { get; set; }
-
-			public string SheetId { get; set; }
-
-		}
-
-		public class CurrencyConfig
-		{
-
-			public string Name { get; set; } = "pixels";
-
-			public string MyCommand { get; set; } = "mypixels";
-
-			public string SheetType { get; set; } = "GoogleSheetProxy";
-
-		}
-
 	}
-
 }
