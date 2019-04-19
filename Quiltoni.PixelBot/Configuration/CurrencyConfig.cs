@@ -12,10 +12,10 @@
 			: this("pixels", "mypixels", "GoogleSheetProxy") {
 		}
 
-		public string Name => GetValue<string>();
+		public string Name => GetConfigValue<string>();
 
-		public string MyCommand => GetValue<string>();
+		public string MyCommand => GetConfigValue<string>();
 
-		public string SheetType => GetValue<string>();
+		public string SheetType => GetConfigValue<string>();
 	}
 }

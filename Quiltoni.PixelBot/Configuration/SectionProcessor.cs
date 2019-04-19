@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Query.Expressions;
 using Microsoft.Extensions.Configuration;
+using Quiltoni.PixelBot.GiveawayGame;
 
 namespace Quiltoni.PixelBot.Configuration
 {
@@ -24,6 +25,12 @@ namespace Quiltoni.PixelBot.Configuration
 
 			if (requestedType == typeof(ICurrencyConfig))
 				return (TServiceConfig)GetCurrencyServiceConfiguration(dictionary);
+
+			if (requestedType == typeof(IGiveawayGameConfiguration))
+				return (TServiceConfig)GetGiveawayGameServiceConfiguration(dictionary);
+
+			if (requestedType == typeof(ICommandsConfig))
+				return (TServiceConfig)GetCommandsServiceConfiguration(dictionary);
 
 			return result;
 		}
@@ -47,6 +54,16 @@ namespace Quiltoni.PixelBot.Configuration
 				GetValue(dictionary, nameof(ICurrencyConfig.Name)),
 				GetValue(dictionary, nameof(ICurrencyConfig.MyCommand)),
 				GetValue(dictionary, nameof(ICurrencyConfig.SheetType)));
+		}
+
+		private static IGiveawayGameConfiguration GetGiveawayGameServiceConfiguration(Dictionary<string, string> dictionary) {
+			return new GiveawayGameConfiguration(
+				GetValue(dictionary, nameof(IGiveawayGameConfiguration.RelayUrl)));
+		}
+
+		private static ICommandsConfig GetCommandsServiceConfiguration(Dictionary<string, string> dictionary) {
+			var newDictionary = dictionary.ToDictionary(pair => pair.Key, pair => Convert.ToBoolean(pair.Value));
+			return new CommandsConfig(newDictionary);
 		}
 
 		private static string GetValue(Dictionary<string, string> dictionary, string key) {

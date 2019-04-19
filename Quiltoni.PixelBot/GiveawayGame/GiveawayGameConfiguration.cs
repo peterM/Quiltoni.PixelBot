@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Quiltoni.PixelBot.Configuration;
 
 namespace Quiltoni.PixelBot.GiveawayGame
 {
-	public class GiveawayGameConfiguration
+	public class GiveawayGameConfiguration : AbstractServiceConfig, IGiveawayGameConfiguration
 	{
+		public GiveawayGameConfiguration(string relayUrl) {
+			SetConfig(nameof(RelayUrl), relayUrl);
+		}
 
 		/// <summary>
 		/// The URL of the video widget relay service
 		/// </summary>
-		public string RelayUrl { get; set; }
-
+		public string RelayUrl => GetConfigValue<string>();
 	}
 }

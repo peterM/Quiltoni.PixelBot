@@ -8,10 +8,10 @@
 			SetConfig(nameof(AccessToken), channel);
 		}
 
-		public string UserName => GetValue<string>();
+		public string UserName => GetConfigValue<string>();
 
-		public string Channel => GetValue<string>();
+		public string Channel => GetConfigValue<string>();
 
-		public string AccessToken => GetValue<string>();
+		public string AccessToken => GetConfigValue<string>();
 	}
 }

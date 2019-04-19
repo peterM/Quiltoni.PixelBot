@@ -2,6 +2,6 @@
 {
 	public interface IServiceConfig
 	{
-		T GetValue<T>(string key);
+		T GetConfigValue<T>(string key);
 	}
 }

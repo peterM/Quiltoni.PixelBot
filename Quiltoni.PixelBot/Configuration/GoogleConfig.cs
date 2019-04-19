@@ -8,10 +8,10 @@
 			SetConfig(nameof(SheetId), sheetId);
 		}
 
-		public string ClientId => GetValue<string>();
+		public string ClientId => GetConfigValue<string>();
 
-		public string ClientSecret => GetValue<string>();
+		public string ClientSecret => GetConfigValue<string>();
 
-		public string SheetId => GetValue<string>();
+		public string SheetId => GetConfigValue<string>();
 	}
 }

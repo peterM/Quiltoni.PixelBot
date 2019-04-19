@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Quiltoni.PixelBot.Configuration;
+using Quiltoni.PixelBot.GiveawayGame;
 
 namespace Quiltoni.PixelBot
 {
@@ -17,11 +18,11 @@ namespace Quiltoni.PixelBot
 
 		public IGoogleConfig Google => GetConfig<IGoogleConfig>();
 
-		public GiveawayGame.GiveawayGameConfiguration GiveawayGame { get; set; }
+		public IGiveawayGameConfiguration GiveawayGame => GetConfig<IGiveawayGameConfiguration>();
 
 		public ICurrencyConfig Currency => GetConfig<ICurrencyConfig>();
 
-		public Dictionary<string, bool> Commands { get; set; }
+		public ICommandsConfig Commands => GetConfig<ICommandsConfig>();
 
 		public T GetConfig<T>()
 			where T : IServiceConfig {

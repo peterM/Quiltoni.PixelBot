@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Quiltoni.PixelBot.Commands;
 using Quiltoni.PixelBot.Configuration;
+using Quiltoni.PixelBot.GiveawayGame;
+
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Quiltoni.PixelBot
@@ -37,21 +38,33 @@ namespace Quiltoni.PixelBot
 
 			services.AddTransient<PixelBotConfig>();
 
+			var configSection = Configuration.GetSection("PixelBot");
+
 			services.AddSingleton<ITwitchConfig>(
 				d => SectionProcessor.GetService<ITwitchConfig>(
-					Configuration.GetSection("PixelBot").GetSection("Twitch")));
+					configSection.GetSection("Twitch")));
 
 			services.AddSingleton<ICurrencyConfig>(
 				d => SectionProcessor.GetService<ICurrencyConfig>(
-					Configuration.GetSection("PixelBot").GetSection("Currency")));
+					configSection.GetSection("Currency")));
 
 			services.AddSingleton<IGoogleConfig>(
 				d => SectionProcessor.GetService<IGoogleConfig>(
-					Configuration.GetSection("PixelBot").GetSection("Google")));
+					configSection.GetSection("Google")));
+
+			services.AddSingleton<IGiveawayGameConfiguration>(
+				d => SectionProcessor.GetService<IGiveawayGameConfiguration>(
+					configSection.GetSection("GiveawayGame")));
+
+			services.AddSingleton<ICommandsConfig>(
+				d => SectionProcessor.GetService<ICommandsConfig>(
+					configSection.GetSection("Commands")));
 
 			services.AddTransient<IServiceConfig>(d => d.GetService<ITwitchConfig>());
 			services.AddTransient<IServiceConfig>(d => d.GetService<IGoogleConfig>());
 			services.AddTransient<IServiceConfig>(d => d.GetService<ICurrencyConfig>());
+			services.AddTransient<IServiceConfig>(d => d.GetService<IGiveawayGameConfiguration>());
+			services.AddTransient<IServiceConfig>(d => d.GetService<ICommandsConfig>());
 
 			// Register bot commands
 			GetType().Assembly.GetTypes()

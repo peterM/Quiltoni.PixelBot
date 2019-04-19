@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Quiltoni.PixelBot.Configuration
@@ -29,7 +28,7 @@ namespace Quiltoni.PixelBot.Configuration
 			this[key] = value;
 		}
 
-		public T GetValue<T>([CallerMemberName] string key = null) {
+		public T GetConfigValue<T>([CallerMemberName] string key = null) {
 			var resultObject = this[key];
 			if (resultObject == null) {
 				return default(T);

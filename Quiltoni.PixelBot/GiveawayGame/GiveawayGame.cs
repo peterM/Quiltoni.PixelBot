@@ -14,7 +14,7 @@ namespace Quiltoni.PixelBot.GiveawayGame
 
 	public class GiveawayGame
 	{
-		private readonly GiveawayGameConfiguration _Config;
+		private readonly IGiveawayGameConfiguration _Config;
 		private readonly StateMachine<GiveawayGameState, GiveawayGameTrigger> _machine;
 		readonly StateMachine<GiveawayGameState, GiveawayGameTrigger>.TriggerWithParameters<IChatService, GiveawayGameCommand> _setHelpTrigger;
 		readonly StateMachine<GiveawayGameState, GiveawayGameTrigger>.TriggerWithParameters<IChatService, GiveawayGameCommand> _setOpenTrigger;

@@ -24,8 +24,8 @@ namespace Quiltoni.PixelBot.Pages
 
 			CurrencyName = config.Currency.Name;
 			SheetProxyType = config.Currency.SheetType;
-			EnableDrinkMeCommand = config.Commands["DrinkMeCommand"];
-			EnableGuessCommand = config.Commands["GuessTimeCommand"];
+			EnableDrinkMeCommand = config.Commands.Commands["DrinkMeCommand"];
+			EnableGuessCommand = config.Commands.Commands["GuessTimeCommand"];
 
 		}
 
