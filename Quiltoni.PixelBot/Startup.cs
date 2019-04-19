@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 using Quiltoni.PixelBot.Commands;
 using Quiltoni.PixelBot.Configuration;
+using Quiltoni.PixelBot.Configuration.Factories;
 using Quiltoni.PixelBot.GiveawayGame;
 
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -58,30 +59,25 @@ namespace Quiltoni.PixelBot
 			IConfigurationSection configSection = Configuration.GetSection("PixelBot");
 
 			services.AddSingleton<ITwitchConfig>(
-				_ => SectionProcessor.GetService<ITwitchConfig>(
-					configSection.GetSection("Twitch")));
+				_ => new TwitchConfigurationFactory().Create(configSection));
 
 			services.AddSingleton<ICurrencyConfig>(
-				_ => SectionProcessor.GetService<ICurrencyConfig>(
-					configSection.GetSection("Currency")));
+				_ => new CurrencyConfigurationFactory().Create(configSection));
 
 			services.AddSingleton<IGoogleConfig>(
-				_ => SectionProcessor.GetService<IGoogleConfig>(
-					configSection.GetSection("Google")));
+				_ => new GoogleConfigurationFactory().Create(configSection));
 
 			services.AddSingleton<IGiveawayGameConfiguration>(
-				_ => SectionProcessor.GetService<IGiveawayGameConfiguration>(
-					configSection.GetSection("GiveawayGame")));
+				_ => new GiveawayGameConfigurationFactory().Create(configSection));
 
 			services.AddSingleton<ICommandsConfig>(
-				_ => SectionProcessor.GetService<ICommandsConfig>(
-					configSection.GetSection("Commands")));
+				_ => new CommandsConfigurationFactory().Create(configSection));
 
-			services.AddTransient<IServiceConfig>(d => d.GetService<ITwitchConfig>());
-			services.AddTransient<IServiceConfig>(d => d.GetService<IGoogleConfig>());
-			services.AddTransient<IServiceConfig>(d => d.GetService<ICurrencyConfig>());
-			services.AddTransient<IServiceConfig>(d => d.GetService<IGiveawayGameConfiguration>());
-			services.AddTransient<IServiceConfig>(d => d.GetService<ICommandsConfig>());
+			services.AddTransient<IServiceConfig>(serviceProvider => serviceProvider.GetService<ITwitchConfig>());
+			services.AddTransient<IServiceConfig>(serviceProvider => serviceProvider.GetService<IGoogleConfig>());
+			services.AddTransient<IServiceConfig>(serviceProvider => serviceProvider.GetService<ICurrencyConfig>());
+			services.AddTransient<IServiceConfig>(serviceProvider => serviceProvider.GetService<IGiveawayGameConfiguration>());
+			services.AddTransient<IServiceConfig>(serviceProvider => serviceProvider.GetService<ICommandsConfig>());
 
 			services.AddTransient<IPixelBotConfigProvider, PixelBotConfig>();
 			// Register bot commands
