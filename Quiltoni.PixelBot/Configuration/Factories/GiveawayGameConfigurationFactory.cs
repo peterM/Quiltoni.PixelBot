@@ -11,5 +11,9 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 			return new GiveawayGameConfiguration(
 				GetValue(dictionary, nameof(IGiveawayGameConfiguration.RelayUrl)));
 		}
+
+		public static IGiveawayGameConfiguration Empty() {
+			return new GiveawayGameConfiguration("relayUrl");
+		}
 	}
 }

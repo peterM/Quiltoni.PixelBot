@@ -12,5 +12,9 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 				GetValue(dictionary, nameof(ITwitchConfig.AccessToken)),
 				GetValue(dictionary, nameof(ITwitchConfig.Channel)));
 		}
+
+		public static ITwitchConfig Empty() {
+			return new TwitchConfig("userName", "accessToken", "channelId");
+		}
 	}
 }

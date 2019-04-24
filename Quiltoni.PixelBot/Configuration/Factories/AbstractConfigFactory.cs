@@ -14,6 +14,10 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 		public TServiceConfig Create(IConfigurationSection parentConfigurationSection) {
 			IConfigurationSection configurationSection = parentConfigurationSection.GetSection(SectionName);
 			Dictionary<string, string> dictionary = GetServiceParameters(configurationSection);
+			return Create(dictionary);
+		}
+
+		public TServiceConfig Create(Dictionary<string, string> dictionary) {
 			return GetServiceConfiguration(dictionary);
 		}
 

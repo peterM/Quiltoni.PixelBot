@@ -24,7 +24,7 @@ namespace Quiltoni.Test.GiveawayGame
 		private readonly Mock<HttpMessageHandler> _MockHandler = new Mock<HttpMessageHandler>();
 		private readonly CORE.GiveawayGame _Game;
 		private readonly GiveawayGameCommand _Cmd;
-		private PixelBot.PixelBotConfig Config = new PixelBot.PixelBotConfig {
+		private PixelBot.IPixelBotConfigProvider Config = new PixelBot.PixelBotConfig {
 			GiveawayGame = new CORE.GiveawayGameConfiguration {
 				RelayUrl = "http://test:8000/api/Test"
 			}

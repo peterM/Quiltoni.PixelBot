@@ -14,6 +14,14 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 			return new CommandsConfig(commands);
 		}
 
+		public static ICommandsConfig Empty() {
+			return new CommandsConfig(
+				new IBotCommandConfig[]
+				{
+					new BotCommandConfig("testCommand", true)
+				});
+		}
+
 		private static bool ToBool(string value) {
 			return Convert.ToBoolean(value);
 		}

@@ -12,5 +12,9 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 				GetValue(dictionary, nameof(ICurrencyConfig.MyCommand)),
 				GetValue(dictionary, nameof(ICurrencyConfig.SheetType)));
 		}
+
+		public static ICurrencyConfig Empty() {
+			return new CurrencyConfig("name", "myCommand", "sheetType");
+		}
 	}
 }

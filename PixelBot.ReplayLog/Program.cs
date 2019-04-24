@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LINQtoCSV;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Quiltoni.PixelBot;
+using Quiltoni.PixelBot.Configuration;
+using Quiltoni.PixelBot.Configuration.Factories;
 
 namespace PixelBot.ReplayLog
 {
@@ -20,10 +23,10 @@ namespace PixelBot.ReplayLog
 			var totalRecords = records.GroupBy(r => r.UpdatedUser)
 				.Select(r => (r.Key, r.Sum(l => l.Changed), "batch"));
 
-			var options = Options.Create<PixelBotConfig>(new PixelBotConfig {
-				Google = new PixelBotConfig.GoogleConfig {
-				}
-			});
+			IGoogleConfig instance = GoogleConfigurationFactory.Empty();
+
+			IPixelBotConfigProvider options = new PixelBotConfig(new IServiceConfig[] { instance });
+
 			var proxy = new DryadGoogleSheetProxy(options, NullLoggerFactory.Instance);
 			proxy.BatchAddPixelsForUsers(totalRecords);
 

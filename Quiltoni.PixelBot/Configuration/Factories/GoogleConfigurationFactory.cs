@@ -12,5 +12,9 @@ namespace Quiltoni.PixelBot.Configuration.Factories
 				GetValue(dictionary, nameof(IGoogleConfig.ClientSecret)),
 				GetValue(dictionary, nameof(IGoogleConfig.SheetId)));
 		}
+
+		public static IGoogleConfig Empty() {
+			return new GoogleConfig("clientId", "clientSeecret", "sheetId");
+		}
 	}
 }

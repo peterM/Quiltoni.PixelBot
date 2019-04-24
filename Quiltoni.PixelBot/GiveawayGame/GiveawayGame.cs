@@ -31,13 +31,13 @@ namespace Quiltoni.PixelBot.GiveawayGame
 
 		public IEnumerable<string> Entrants { get { return _entrants.ToArray(); } }
 
-		public GiveawayGame(IHttpClientFactory factory, IOptions<PixelBotConfig> config, bool enableCountdown = true) {
+		public GiveawayGame(IHttpClientFactory factory, IPixelBotConfigProvider config, bool enableCountdown = true) {
 
 			// Cheer 400 pharewings 24/3/19 
 			// Cheer 2500 devlead 28/3/19 
 			// Cheer 100 perryatdigitalox 28/3/19 
 
-			_Config = config.Value.GiveawayGame;
+			_Config = config.GiveawayGame;
 
 			_machine = new StateMachine<GiveawayGameState, GiveawayGameTrigger>(GiveawayGameState.Idle);
 			_setHelpTrigger = _machine.SetTriggerParameters<IChatService, GiveawayGameCommand>(GiveawayGameTrigger.Help);
@@ -281,5 +281,5 @@ namespace Quiltoni.PixelBot.GiveawayGame
 		}
 
 	}
-	 
+
 }
