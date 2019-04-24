@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
+
 using Moq;
 using Moq.Contrib.HttpClient;
+
 using Quiltoni.PixelBot;
 using Quiltoni.PixelBot.Commands;
+using Quiltoni.PixelBot.Configuration;
+using Quiltoni.PixelBot.Configuration.Factories;
+using Quiltoni.PixelBot.GiveawayGame;
+
 using Xunit;
+
 using CORE = Quiltoni.PixelBot.GiveawayGame;
 
 namespace Quiltoni.Test.GiveawayGame
@@ -26,11 +31,7 @@ namespace Quiltoni.Test.GiveawayGame
 		private readonly IHttpClientFactory _MockClientFactory;
 		private readonly CORE.GiveawayGame _Game;
 		private readonly GiveawayGameCommand _Cmd;
-		private PixelBot.PixelBotConfig Config = new PixelBot.PixelBotConfig {
-			GiveawayGame = new CORE.GiveawayGameConfiguration {
-				RelayUrl = "http://test:8000/api/Test"
-			}
-		};
+		private IPixelBotConfigProvider Config;
 
 		public GivenOpenState() {
 
@@ -38,11 +39,16 @@ namespace Quiltoni.Test.GiveawayGame
 
 			_MockClientFactory = _MockHandler.CreateClientFactory();
 
-			_Game = new CORE.GiveawayGame(_MockClientFactory, Options.Create(Config));
+			IGiveawayGameConfiguration giveawayGameConfiguration = new GiveawayGameConfigurationFactory().Create(
+				new Dictionary<string, string>()
+				{
+					{ nameof(IGiveawayGameConfiguration.RelayUrl), "http://test:8000/api/Test" }
+				});
+			Config = new PixelBotConfig(new IServiceConfig[] { giveawayGameConfiguration });
+
+			_Game = new CORE.GiveawayGame(_MockClientFactory, Config);
 			_Cmd = new GiveawayGameCommand(_Game, new Mock<IConfiguration>().Object) {
-				ChatUser = new ChatUser {
-					IsBroadcaster = true
-				}
+				ChatUser = new ChatUser { IsBroadcaster = true }
 			};
 
 		}
